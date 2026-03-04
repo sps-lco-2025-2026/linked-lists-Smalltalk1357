@@ -25,8 +25,6 @@ public class IntegerLinkedList
             _head.Append(v);
     }
     
-    
-
     public void Prepend(int v)
     {
         if (_head == null)
@@ -38,8 +36,13 @@ public class IntegerLinkedList
             _head = node;
         }
     }
-    
-    
+
+    public bool Remove(int v)
+    {
+        if (_head != null)
+            return _head.Delete(v);
+        return false;
+    }
     
     public override string ToString()
     {
@@ -71,6 +74,21 @@ internal class IntegerNode
             Next.Append(v);
     }
 
+    internal bool Delete(int v)
+    {
+        if (Next._value == v)
+        {
+            Next = Next.Next;
+            return true;
+        }
+        else
+        {
+            if (Next != null)
+                return Next.Delete(v);
+            return false;
+        }
+    }
+    
     // internal IntegerNode Reverse()
     // {
     //     IntegerNode newMe = new IntegerNode(_value);
