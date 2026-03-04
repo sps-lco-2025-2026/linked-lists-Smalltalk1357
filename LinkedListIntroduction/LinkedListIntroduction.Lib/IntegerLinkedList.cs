@@ -3,62 +3,92 @@
 public class IntegerLinkedList
 {
     IntegerNode _head;
-   
+    
     public IntegerLinkedList()
     {
         _head = null;
     }
-
+    
     public IntegerLinkedList(int v)
     {
         _head = new IntegerNode(v);
     }
-
+    
     public int Count => _head == null ? 0 : _head.Count;
     public int Sum => _head == null ? 0 : _head.Sum;
-
+    
     public void Append(int v)
     {
         if (_head == null)
             _head = new IntegerNode(v);
         else
             _head.Append(v);
-
     }
+    
+    
 
+    public void Prepend(int v)
+    {
+        if (_head == null)
+            _head = new IntegerNode(v);
+        else
+        {
+            IntegerNode node = new IntegerNode(v);
+            node.Next = _head;
+            _head = node;
+        }
+    }
+    
+    
+    
     public override string ToString()
     {
         return _head == null ? "{}" : $"{{{_head}}}";
     }
 }
 
-public class IntegerNode
+internal class IntegerNode
 {
     int _value;
-    IntegerNode _next;
-
-     internal int Count => _next == null ? 1 : 1 + _next.Count;
-            
-    internal int Sum => _next == null ? _value : _value + _next.Sum;
-
-
+    internal IntegerNode Next;
+    
+    internal int Count => Next == null ? 1 : 1 + Next.Count;
+    
+    internal int Sum => Next == null ? _value : _value + Next.Sum;
+    
+    
     internal IntegerNode(int v)
     {
         _value = v;
-        _next = null;
+        Next = null;
     }
-
+    
     internal void Append(int v)
     {
-        if (_next == null)
-            _next = new IntegerNode(v);
+        if (Next == null)
+            Next = new IntegerNode(v);
         else
-            _next.Append(v);
+            Next.Append(v);
     }
 
+    // internal IntegerNode Reverse()
+    // {
+    //     IntegerNode newMe = new IntegerNode(_value);
+    //     if (Next != null)
+    //         return newMe;
+    //     return Next.Reverse(newMe);
+    // }
+    //
+    // IntegerNode Reverse(IntegerNode previous)
+    // {
+    //     IntegerNode newMe = new IntegerNode(_value, previous);
+    //     if (Next != null)
+    //         return newMe;
+    //     return Next.Reverse(newMe);
+    // }
+    
     public override string ToString()
     {
-        return _next == null ? _value.ToString() : $"{_value}, {_next}";
+        return Next == null ? _value.ToString() : $"{_value}, {Next}";
     }
-
 }
