@@ -37,11 +37,25 @@ public class IntegerLinkedList
         }
     }
 
-    public bool Remove(int v)
+    public bool Delete(int v)
     {
-        if (_head != null)
-            return _head.Delete(v);
-        return false;
+        int originalCount = Count;
+        if (_head == null)
+            return false;
+        _head = _head.Delete(v);
+        return (originalCount != Count);
+    }
+
+    public void Insert(int v, int index)
+    {
+        if (index < 1)
+        {
+            Prepend(v);
+            return;
+        }
+
+        int counter = 0;
+        
     }
     
     public override string ToString()
@@ -74,36 +88,27 @@ internal class IntegerNode
             Next.Append(v);
     }
 
-    internal bool Delete(int v)
+    /**
+        If v is found, it will return the current node.
+        If v is not found, it will return null.
+    */
+    internal IntegerNode Delete(int v)
     {
-        if (Next._value == v)
+        if (_value == v)
         {
-            Next = Next.Next;
-            return true;
+            if (Next == null)
+                return null;
+            
+            return Next;
         }
-        else
-        {
-            if (Next != null)
-                return Next.Delete(v);
-            return false;
-        }
+        
+        if (Next != null)
+            Next = Next.Delete(v);
+        
+        return this;
     }
     
-    // internal IntegerNode Reverse()
-    // {
-    //     IntegerNode newMe = new IntegerNode(_value);
-    //     if (Next != null)
-    //         return newMe;
-    //     return Next.Reverse(newMe);
-    // }
-    //
-    // IntegerNode Reverse(IntegerNode previous)
-    // {
-    //     IntegerNode newMe = new IntegerNode(_value, previous);
-    //     if (Next != null)
-    //         return newMe;
-    //     return Next.Reverse(newMe);
-    // }
+    
     
     public override string ToString()
     {
