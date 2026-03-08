@@ -100,12 +100,31 @@ public sealed class BasicLinkedListTests
         Assert.AreEqual("{5, 8, 7, 9}", ill.ToString());
         
         ill.Insert(6, 10);
-        Assert.AreEqual("{5, 8, 7, 9, 10}", ill.ToString());
+        Assert.AreEqual("{5, 8, 7, 9, 6}", ill.ToString());
         
         ill.Insert(1, 0);
-        Assert.AreEqual("{0, 5, 8, 7, 9, 10}", ill.ToString());
+        Assert.AreEqual("{1, 5, 8, 7, 9, 6}", ill.ToString());
 
         ill.Insert(15, -1);
-        Assert.AreEqual("{15, 0, 5, 8, 7, 9, 10}", ill.ToString());
+        Assert.AreEqual("{15, 1, 5, 8, 7, 9, 6}", ill.ToString());
+    }
+
+    [TestMethod]
+    public void TestJoin()
+    {
+        var ill = new IntegerLinkedList(5);
+        ill.Append(7);
+        ill.Append(9);
+        var ill2 = new IntegerLinkedList(11);
+        ill2.Append(13);
+        ill2.Append(15);
+        ill.Join(ill2);
+        Assert.AreEqual("{5, 7, 9, 11, 13, 15}", ill.ToString());
+        
+        var ill3 = new IntegerLinkedList(1);
+        ill3.Append(3);
+        var ill4 = new IntegerLinkedList();
+        ill3.Join(ill4);
+        Assert.AreEqual("{1, 3}", ill3.ToString());
     }
 }

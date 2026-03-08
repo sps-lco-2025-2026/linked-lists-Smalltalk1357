@@ -25,6 +25,14 @@ public class IntegerLinkedList
             _head.Append(v);
     }
     
+    private void Append(IntegerNode other)
+    {
+        if (_head == null)
+            _head = other;
+        else
+            _head.Append(other);
+    }
+    
     public void Prepend(int v)
     {
         if (_head == null)
@@ -48,14 +56,38 @@ public class IntegerLinkedList
 
     public void Insert(int v, int index)
     {
+        int counter = 0;
+        IntegerNode currentNode = _head;
+        
         if (index < 1)
         {
             Prepend(v);
             return;
         }
 
-        int counter = 0;
-        
+        index -= 1; // find node before insertion point
+        while (counter < index)
+        {
+            if (currentNode == null)
+            {
+                // due to empty list / index out of bounds
+                Append(v);
+                return;
+            }
+            currentNode = currentNode.Next;
+            counter++;
+        }
+        IntegerNode nextNode = currentNode.Next;
+        currentNode.Next = new IntegerNode(v);
+        currentNode.Next.Next = nextNode;
+    }
+
+    /**
+     * Sets tail.Next to other.Head 
+     */
+    public void Join(IntegerLinkedList other)
+    {
+        Append(other._head);
     }
     
     public override string ToString()
@@ -88,6 +120,14 @@ internal class IntegerNode
             Next.Append(v);
     }
 
+    internal void Append(IntegerNode other)
+    {
+        if (Next == null)
+            Next = other;
+        else
+            Next.Append(other);
+    }
+    
     /**
         If v is found, it will return the current node.
         If v is not found, it will return null.
@@ -107,8 +147,6 @@ internal class IntegerNode
         
         return this;
     }
-    
-    
     
     public override string ToString()
     {
