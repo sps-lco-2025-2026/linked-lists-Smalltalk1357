@@ -83,11 +83,72 @@ public class IntegerLinkedList
     }
 
     /**
-     * Sets tail.Next to other.Head 
+     * Sets tail.Next to other.Head - does NOT prevent infinite loops
      */
     public void Join(IntegerLinkedList other)
     {
         Append(other._head);
+    }
+
+    public bool Contains(int v)
+    {
+        if (_head == null)
+            return false;
+        return _head.Contains(v);
+    }
+
+    /**
+     * Save the current node, then delete all nodes with same value.
+     * Then restore the current node at the current position, iterate through the list
+     */
+    public void RemoveDuplicates()
+    {
+        IntegerNode currentNode = _head;
+        while (currentNode != null)
+        {
+            int value = currentNode.Value;
+            bool unchanged = false;
+            while (!unchanged)
+            {
+                int startCount = Count;
+                if (currentNode.Next == null)
+                {
+                    currentNode = null;
+                    unchanged = true;
+                }
+                else
+                {
+                    currentNode.Next = currentNode.Next.Delete(value);
+                    if (startCount == Count)
+                    {
+                        currentNode = currentNode.Next;
+                        unchanged = true;
+                    }
+                }
+            }
+        }
+    }
+
+    public void MeshLists(IntegerLinkedList other)
+    {
+        IntegerNode currentNode = other._head;
+        if (currentNode == null)
+            return;
+        if (this == other)
+            return;
+        if (_head == null)
+        {
+            _head = other._head;
+            return;
+        }
+
+        int index = 1;
+        while (currentNode != null)
+        {
+            Insert(currentNode.Value, index);
+            currentNode = currentNode.Next;
+            index += 2;
+        }
     }
     
     public override string ToString()
@@ -98,17 +159,17 @@ public class IntegerLinkedList
 
 internal class IntegerNode
 {
-    int _value;
+    public int Value { get; }
     internal IntegerNode Next;
     
     internal int Count => Next == null ? 1 : 1 + Next.Count;
     
-    internal int Sum => Next == null ? _value : _value + Next.Sum;
+    internal int Sum => Next == null ? Value : Value + Next.Sum;
     
     
     internal IntegerNode(int v)
     {
-        _value = v;
+        Value = v;
         Next = null;
     }
     
@@ -134,7 +195,7 @@ internal class IntegerNode
     */
     internal IntegerNode Delete(int v)
     {
-        if (_value == v)
+        if (Value == v)
         {
             if (Next == null)
                 return null;
@@ -147,9 +208,20 @@ internal class IntegerNode
         
         return this;
     }
+
+    internal bool Contains(int v)
+    {
+        if (Value == v)
+            return true;
+        
+        if (Next != null)
+            return Next.Contains(v);
+        
+        return false;
+    }
     
     public override string ToString()
     {
-        return Next == null ? _value.ToString() : $"{_value}, {Next}";
+        return Next == null ? Value.ToString() : $"{Value}, {Next}";
     }
 }

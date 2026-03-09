@@ -127,4 +127,56 @@ public sealed class BasicLinkedListTests
         ill3.Join(ill4);
         Assert.AreEqual("{1, 3}", ill3.ToString());
     }
+    
+    [TestMethod]
+    public void TestContains()
+    {
+        var ill = new IntegerLinkedList(5);
+        ill.Append(7);
+        Assert.IsTrue(ill.Contains(7));
+        Assert.IsFalse(ill.Contains(10));
+    }
+
+    [TestMethod]
+    public void TestDuplicates()
+    {
+        var ill = new IntegerLinkedList(1);
+        ill.Append(1);
+        ill.Append(2);
+        ill.Append(3);
+        ill.Append(5);
+        ill.Append(5);
+        ill.RemoveDuplicates();
+        Assert.AreEqual("{1, 2, 3, 5}", ill.ToString());
+        
+        var ill2 = new IntegerLinkedList(1);
+        ill2.Append(1);
+        ill2.Append(1);
+        ill2.RemoveDuplicates();
+        Assert.AreEqual("{1}", ill2.ToString());
+    }
+
+    [TestMethod]
+    public void TestMeshLists()
+    {
+        var ill = new IntegerLinkedList(0);
+        ill.Append(2);
+        var ill2 = new IntegerLinkedList(1);
+        ill2.Append(3);
+        ill.MeshLists(ill2);
+        Assert.AreEqual("{0, 1, 2, 3}", ill.ToString());
+        
+        var ill3 = new IntegerLinkedList(0);
+        ill3.Append(2);
+        var ill4 = new IntegerLinkedList(1);
+        ill4.Append(3);
+        ill4.Append(5);
+        var ill5 = new IntegerLinkedList();
+        ill3.MeshLists(ill3);
+        Assert.AreEqual("{0, 2}", ill3.ToString());
+        ill3.MeshLists(ill4);
+        Assert.AreEqual("{0, 1, 2, 3, 5}", ill3.ToString());
+        ill3.MeshLists(ill5);
+        Assert.AreEqual("{0, 1, 2, 3, 5}", ill3.ToString());
+    }
 }
