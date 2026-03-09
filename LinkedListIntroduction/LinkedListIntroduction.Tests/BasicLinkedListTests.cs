@@ -179,4 +179,33 @@ public sealed class BasicLinkedListTests
         ill3.MeshLists(ill5);
         Assert.AreEqual("{0, 1, 2, 3, 5}", ill3.ToString());
     }
+    
+    [TestMethod]
+    public void Reverse()
+    {
+        var ill = new IntegerLinkedList(0);
+        ill.Append(1);
+        ill.Append(2);
+        ill.Append(3);
+        ill.Append(4);
+        ill.Append(5);
+        var ill2 = ill.Reverse();
+        Assert.AreEqual("{5, 4, 3, 2, 1, 0}", ill2.ToString());
+        
+        var ill3 = new IntegerLinkedList();
+        var ill4 = ill3.Reverse();
+        Assert.AreEqual("{}", ill4.ToString());
+    }
+
+    [TestMethod]
+    public void TestSorted()
+    {
+        var ill = new SortedIntegerLinkedList();
+        ill.Append(5);
+        ill.Append(1);
+        ill.Append(-1);
+        ill.Append(100);
+        ill.Append(9);
+        Assert.AreEqual("{-1, 1, 5, 9, 100}", ill.ToString());
+    }
 }

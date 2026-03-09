@@ -2,7 +2,7 @@
 
 public class IntegerLinkedList
 {
-    IntegerNode _head;
+    IntegerNode? _head;
     
     public IntegerLinkedList()
     {
@@ -14,8 +14,8 @@ public class IntegerLinkedList
         _head = new IntegerNode(v);
     }
     
-    public int Count => _head == null ? 0 : _head.Count;
-    public int Sum => _head == null ? 0 : _head.Sum;
+    public int Count => _head?.Count ?? 0;
+    public int Sum => _head?.Sum ?? 0;
     
     public void Append(int v)
     {
@@ -25,7 +25,7 @@ public class IntegerLinkedList
             _head.Append(v);
     }
     
-    private void Append(IntegerNode other)
+    private void Append(IntegerNode? other)
     {
         if (_head == null)
             _head = other;
@@ -56,30 +56,30 @@ public class IntegerLinkedList
 
     public void Insert(int v, int index)
     {
-        int counter = 0;
-        IntegerNode currentNode = _head;
-        
-        if (index < 1)
+        if (index <= 0)
         {
             Prepend(v);
             return;
         }
 
-        index -= 1; // find node before insertion point
-        while (counter < index)
+        if (_head == null)
         {
-            if (currentNode == null)
-            {
-                // due to empty list / index out of bounds
-                Append(v);
-                return;
-            }
-            currentNode = currentNode.Next;
-            counter++;
+            _head = new IntegerNode(v);
+            return;
         }
-        IntegerNode nextNode = currentNode.Next;
-        currentNode.Next = new IntegerNode(v);
-        currentNode.Next.Next = nextNode;
+
+        IntegerNode currentNode = _head;
+        int currentIndex = 0;
+
+        while (currentIndex < (index - 1) && currentNode.Next != null)
+        {
+            currentNode = currentNode.Next;
+            currentIndex++;
+        }
+
+        IntegerNode newNode = new IntegerNode(v);
+        newNode.Next = currentNode.Next;
+        currentNode.Next = newNode;
     }
 
     /**
@@ -98,12 +98,12 @@ public class IntegerLinkedList
     }
 
     /**
-     * Save the current node, then delete all nodes with same value.
+     * Save the current node, then delete all nodes with the same value.
      * Then restore the current node at the current position, iterate through the list
      */
     public void RemoveDuplicates()
     {
-        IntegerNode currentNode = _head;
+        IntegerNode? currentNode = _head;
         while (currentNode != null)
         {
             int value = currentNode.Value;
@@ -111,7 +111,7 @@ public class IntegerLinkedList
             while (!unchanged)
             {
                 int startCount = Count;
-                if (currentNode.Next == null)
+                if (currentNode!.Next == null)
                 {
                     currentNode = null;
                     unchanged = true;
@@ -131,7 +131,7 @@ public class IntegerLinkedList
 
     public void MeshLists(IntegerLinkedList other)
     {
-        IntegerNode currentNode = other._head;
+        IntegerNode? currentNode = other._head;
         if (currentNode == null)
             return;
         if (this == other)
@@ -150,6 +150,19 @@ public class IntegerLinkedList
             index += 2;
         }
     }
+
+    public IntegerLinkedList Reverse()
+    {
+        IntegerLinkedList reversed = new IntegerLinkedList();
+        IntegerNode? currentNode = _head;
+        
+        while (currentNode != null)
+        {
+            reversed.Prepend(currentNode.Value);
+            currentNode = currentNode.Next;
+        }
+        return reversed;
+    }
     
     public override string ToString()
     {
@@ -160,11 +173,11 @@ public class IntegerLinkedList
 internal class IntegerNode
 {
     public int Value { get; }
-    internal IntegerNode Next;
+    internal IntegerNode? Next;
     
     internal int Count => Next == null ? 1 : 1 + Next.Count;
     
-    internal int Sum => Next == null ? Value : Value + Next.Sum;
+    internal int Sum => Value + Next?.Sum ?? Value;
     
     
     internal IntegerNode(int v)
@@ -181,7 +194,7 @@ internal class IntegerNode
             Next.Append(v);
     }
 
-    internal void Append(IntegerNode other)
+    internal void Append(IntegerNode? other)
     {
         if (Next == null)
             Next = other;
@@ -193,7 +206,7 @@ internal class IntegerNode
         If v is found, it will return the current node.
         If v is not found, it will return null.
     */
-    internal IntegerNode Delete(int v)
+    internal IntegerNode? Delete(int v)
     {
         if (Value == v)
         {
